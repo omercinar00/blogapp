@@ -50,7 +50,7 @@ const Navbar = () => {
             href="/"
             sx={{
               mr: 2,
-              display: "flex",
+              display: { xs: "none", md: "flex" },
               flexGrow: 1,
               alignItems: "center",
               fontFamily: "monospace",
@@ -134,13 +134,18 @@ const Navbar = () => {
           <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
             {!currentUser &&
               pages.map((page) => (
-                <Button
-                  key={page}
-                  onClick={handleCloseNavMenu}
-                  sx={{ my: 2, color: "white", display: "block" }}
+                <Link
+                  to={`/${page.toLocaleLowerCase()}`}
+                  style={{ textDecoration: "none", color: "black" }}
                 >
-                  {page}
-                </Button>
+                  <Button
+                    key={page}
+                    onClick={handleCloseNavMenu}
+                    sx={{ my: 2, color: "white", display: "block" }}
+                  >
+                    {page}
+                  </Button>
+                </Link>
               ))}
           </Box>
 
