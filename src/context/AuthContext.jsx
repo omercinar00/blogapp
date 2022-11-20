@@ -9,9 +9,9 @@ const AuthContextProvider = ({ children }) => {
   console.log(currentUser);
   useEffect(() => {
     userObserver(setCurrentUser);
-    console.log(currentUser);
+    
   }, []);
-  console.log(currentUser);
+
 
   return (
     <div>

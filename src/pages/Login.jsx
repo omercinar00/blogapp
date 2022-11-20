@@ -10,7 +10,8 @@ import { Formik, Form } from "formik";
 import { TextField } from "@mui/material";
 import LoadingButton from "@mui/lab/LoadingButton";
 import * as yup from "yup";
-import { signUpWithGoogle } from "../helpers/firebase";
+import { signIn, signUpWithGoogle } from "../helpers/firebase";
+import { useState } from "react";
 const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -19,20 +20,30 @@ const loginSchema = yup.object().shape({
   password: yup
     .string()
     .required("Please enter a password ")
-    .min(8, "Password must have min 8 chars")
-    .max(16, "Password must have max 16 chars")
-    .matches(/\d+/, "Password must have a number")
-    .matches(/[a-z]+/, "Password must have a lowercase")
-    .matches(/[A-Z]+/, "Password must have an uppercase")
-    .matches(/[!,?{}><%&$#£+-.]+/, " Password must have a special char"),
+    // .min(8, "Password must have min 8 chars")
+    // .max(16, "Password must have max 16 chars")
+    // .matches(/\d+/, "Password must have a number")
+    // .matches(/[a-z]+/, "Password must have a lowercase")
+    // .matches(/[A-Z]+/, "Password must have an uppercase")
+    // .matches(/[!,?{}><%&$#£+-.]+/, " Password must have a special char"),
 });
 const Login = () => {
+  const [user, setUser] = useState([]);
   const navigate = useNavigate();
   // const { currentUser, error, loading } = useSelector((state) => state?.auth);
+  const handleChangeUser = (e) => {
+    e.preventDefault();
+    const { name, value } = e.target;
+    setUser({ ...user, [name]: value });
+    console.log(user);
+  };
 
   const handleGoogle = () => {
     signUpWithGoogle(navigate);
   };
+   const handleSubmit = () => {
+     signIn(user?.email,user?.password,navigate);
+   };
 
   return (
     <Container maxWidth="lg">
@@ -68,12 +79,7 @@ const Login = () => {
           >
             <LockIcon size="30" />
           </Avatar>
-          <Typography
-            variant="h4"
-            align="center"
-            mb={4}
-            color="black"
-          >
+          <Typography variant="h4" align="center" mb={4} color="black">
             Login
           </Typography>
           <Formik
@@ -93,7 +99,7 @@ const Login = () => {
               touched,
               errors,
             }) => (
-              <Form>
+              <Form onSubmit={handleSubmit}>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <TextField
                     label="Email"
@@ -101,8 +107,8 @@ const Login = () => {
                     id="email"
                     type="email"
                     variant="outlined"
-                    value={values.email}
-                    onChange={handleChange}
+                    value={user?.email}
+                    onChange={handleChangeUser}
                     onBlur={handleBlur}
                     error={touched.email && Boolean(errors.email)}
                     helperText={touched.email && errors.email}
@@ -113,8 +119,8 @@ const Login = () => {
                     id="password"
                     type="password"
                     variant="outlined"
-                    value={values.password}
-                    onChange={handleChange}
+                    value={user?.password}
+                    onChange={handleChangeUser}
                     onBlur={handleBlur}
                     error={touched.password && Boolean(errors.password)}
                     helperText={touched.password && errors.password}
@@ -134,7 +140,12 @@ const Login = () => {
                     onClick={handleGoogle}
                   >
                     Login With Google
-                    <svg style={{marginLeft:"1rem"}} width="32" height="32" viewBox="0 0 24 24">
+                    <svg
+                      style={{ marginLeft: "1rem" }}
+                      width="32"
+                      height="32"
+                      viewBox="0 0 24 24"
+                    >
                       <path
                         fill="currentColor"
                         d="M3.064 7.51A9.996 9.996 0 0 1 12 2c2.695 0 4.959.99 6.69 2.605l-2.867 2.868C14.786 6.482 13.468 5.977 12 5.977c-2.605 0-4.81 1.76-5.595 4.123c-.2.6-.314 1.24-.314 1.9c0 .66.114 1.3.314 1.9c.786 2.364 2.99 4.123 5.595 4.123c1.345 0 2.49-.355 3.386-.955a4.6 4.6 0 0 0 1.996-3.018H12v-3.868h9.418c.118.654.182 1.336.182 2.045c0 3.046-1.09 5.61-2.982 7.35C16.964 21.105 14.7 22 12 22A9.996 9.996 0 0 1 2 12c0-1.614.386-3.14 1.064-4.49z"

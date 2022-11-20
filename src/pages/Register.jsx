@@ -12,6 +12,7 @@ import LoadingButton from "@mui/lab/LoadingButton";
 import * as yup from "yup";
 import { createUser, signUpWithGoogle } from "../helpers/firebase";
 import { useState } from "react";
+import { useSelector } from "react-redux";
 const loginSchema = yup.object().shape({
   email: yup
     .string()
@@ -27,7 +28,6 @@ const loginSchema = yup.object().shape({
 });
 const Register = () => {
   const navigate = useNavigate();
-  // const { currentUser, error, loading } = useSelector((state) => state?.auth);
 
   const handleGoogle = () => {
     signUpWithGoogle(navigate);
@@ -42,19 +42,17 @@ const Register = () => {
 
   const handleChangeInfo = (e) => {
     e.preventDefault();
-    // const name=e.target.name;
-    // const value=e.target.value;
     const { name, value } = e.target;
     setUserInfo({ ...userInfo, [name]: value });
     console.log(userInfo);
   };
-  const firebaseGonder = () => {
+  const handleSubmit = () => {
     // const displayName = `${firstName} ${lastName}`;
     createUser(
-      userInfo.email,
-      userInfo.password,
+      userInfo?.email,
+      userInfo?.password,
       navigate,
-      userInfo.displayName
+      userInfo?.displayName
     );
   };
 
@@ -110,7 +108,8 @@ const Register = () => {
               <Form>
                 <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
                   <TextField
-                    label="displayName"
+                  required
+                    label="Display Name"
                     name="displayName"
                     id="displayName"
                     type="text"
@@ -122,6 +121,7 @@ const Register = () => {
                     helperText={touched.displayName && errors.displayName}
                   />
                   <TextField
+                  required
                     label="Email"
                     name="email"
                     id="email"
@@ -134,6 +134,7 @@ const Register = () => {
                     helperText={touched.email && errors.email}
                   />
                   <TextField
+                  required
                     label="Password"
                     name="password"
                     id="password"
@@ -150,6 +151,7 @@ const Register = () => {
                     type="submit"
                     loadingPosition="center"
                     variant="contained"
+                    onClick={handleSubmit}
                   >
                     Submit
                   </LoadingButton>

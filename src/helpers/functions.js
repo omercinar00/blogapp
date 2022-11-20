@@ -10,20 +10,22 @@ import {
 } from "firebase/database";
 import { useEffect, useState } from "react";
 
-export const AddUser = (blog) => {
+export const AddBlog = (blog) => {
   const db = getDatabase();
   const userRef = ref(db, "blogcontent");
   const newUserRef = push(userRef);
   set(newUserRef, {
-    title: blog.title,
-    photoUrl: blog.photoUrl,
-    content: blog.content,
-    email: blog.email,
+    title: blog?.title,
+    photoUrl: blog?.photoUrl,
+    content: blog?.content,
+    email: blog?.email,
+    displayName:blog?.displayName,
+    userphotoUrl:blog?.userphotoUrl
   });
 };
 
-export const GetUser = () => {
-  const [contactList, setContactList] = useState();
+export const GetBlog = () => {
+  const [postList, setPostList] = useState();
   useEffect(() => {
     const db = getDatabase();
     const userRef = ref(db, "blogcontent");
@@ -34,18 +36,18 @@ export const GetUser = () => {
       for (let id in data) {
         baglantiArray.push({ id, ...data[id] });
       }
-      setContactList(baglantiArray);
+      setPostList(baglantiArray);
     });
   }, []);
-  return { contactList };
+  return { postList };
 };
-export const DeleteUser = (id) => {
+export const DeleteBlog = (id) => {
   const db = getDatabase();
   const userRef = ref(db, "blogcontent");
   remove(ref(db, "blogcontent/" + id));
 };
 
-export const EditUser = (value) => {
+export const EditBlog = (value) => {
   const db = getDatabase();
   const updates = {};
 

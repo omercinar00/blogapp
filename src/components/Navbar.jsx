@@ -150,7 +150,7 @@ const Navbar = () => {
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>
-            <Tooltip title="Open settings">
+            <Tooltip title={currentUser.displayName}>
               <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
                 {currentUser && (
                   <Avatar
@@ -182,6 +182,7 @@ const Navbar = () => {
               {settings.map((setting) => (
                 <MenuItem key={setting} onClick={handleCloseUserMenu}>
                   <Link
+          
                     style={{ textDecoration: "none", color: "black" }}
                     to={`/${setting.toLocaleLowerCase().replace(/\s+/g, "")}`}
                   >

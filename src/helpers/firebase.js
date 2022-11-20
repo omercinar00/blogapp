@@ -36,16 +36,18 @@ export const createUser = async (email, password, navigate, displayName) => {
     let userCredential = await createUserWithEmailAndPassword(
       auth,
       email,
-      password
+      password,
+      displayName
     );
     //? kullanıcı profilini güncellemek için kullanılan firebase metodu
     await updateProfile(auth.currentUser, {
       displayName: displayName,
     });
-    navigate("/");
+    // navigate("/");
     toastSuccessNotify("Registered successfully!");
     // console.log(userCredential);
   } catch (error) {
+    console.log(error.message)
     toastErrorNotify(error.message);
     // alert(error.message);
   }
